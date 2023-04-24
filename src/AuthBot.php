@@ -13,7 +13,9 @@ class AuthBot
     }
 
     public function sendConfirmToTelegram(
+        string $username,
         string $telegramId,
+        int $code,
         string $hashId,
         string $ip,
         string $browser,
@@ -23,6 +25,8 @@ class AuthBot
             chatId: $telegramId,
             text: view('heliAuth::auth_confirm', [
                 'ip' => $ip,
+                'username' => $username,
+                'code' => $code,
                 'browser' => $browser,
                 'url' => str_replace(['http://', 'https://', 'www.'], '', url('/backend')),
                 'status' => $status,

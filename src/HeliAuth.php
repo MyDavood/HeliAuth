@@ -18,11 +18,14 @@ class HeliAuth
         if ($user != null) {
             $request = request();
             $hashId = Str::uuid()->toString();
+            $code = rand(pow(10, 3), pow(10, 4)-1);
 
             $this->bot->sendConfirmToTelegram(
+                username: $user->username,
                 telegramId: $user->telegram_id,
+                code: $code,
                 hashId: $hashId,
-                ip: $request->ip(),
+                ip: $request->getClientIp(),
                 browser: $request->userAgent(),
             );
 
@@ -30,6 +33,7 @@ class HeliAuth
                 key: $hashId,
                 value: [
                     'userId' => $user->id,
+                    'code' => $code,
                     'telegramId' => $user->telegram_id,
                     'status' => 0,
                 ],

@@ -1,7 +1,8 @@
 we received a request to log in on <code>{{ $url }}</code> with your Telegram account.
 
-To authorize this request, use the <b>'Confirm'</b> button below.
+To authorize this request, use the <b>'Confirm'</b> button below, Or enter <code>{{ $code }}</code>.
 
+<b>Username</b>: <code>{{ $username }}</code>
 <b>Browser</b>: <code>{{ $browser }}</code>
 <b>IP</b>: <code>{{ $ip }}</code>
 
