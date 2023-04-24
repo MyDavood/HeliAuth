@@ -4,6 +4,7 @@ namespace Heli\Auth;
 
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
+use UAParser\Parser;
 
 class AuthBot
 {
@@ -21,13 +22,18 @@ class AuthBot
         string $browser,
         int $status = 0,
     ): void {
+        $parser = Parser::create();
+        $ua = $parser->parse($browser);
+
+
+
         $this->bot->sendMessage(
             chatId: $telegramId,
             text: view('heliAuth::auth_confirm', [
                 'ip' => $ip,
                 'username' => $username,
                 'code' => $code,
-                'browser' => $browser,
+                'ua' => $ua,
                 'url' => str_replace(['http://', 'https://', 'www.'], '', url('/backend')),
                 'status' => $status,
             ])->render(),
