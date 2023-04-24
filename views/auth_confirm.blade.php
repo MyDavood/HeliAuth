@@ -2,9 +2,9 @@ we received a request to log in on <code>{{ $url }}</code> with your Telegram ac
 
 To authorize this request, use the <b>'Confirm'</b> button below, Or enter <code>{{ $code }}</code>.
 
-<b>Username</b>: <code>{{ $username }}</code>
-<b>Browser</b>: <code>{{ $ua->ua->family }} {{ $ua->ua->major }} on {{ $ua->os->family }} {{ $ua->os->major }}</code>
-<b>IP</b>: <code>{{ $ip }}</code>
+<b>Username</b>: {{ $username }}
+<b>Browser</b>: {{ $ua->ua->family }} {{ $ua->ua->major }} on {{ $ua->os->family }} {{ $ua->os->major }},{{ $ua->os->minor }}</code>
+<b>IP</b>: {{ $ip }}
 
 If you didn't request this, use the 'Decline' button or ignore this message.
 @if($status == 1)
