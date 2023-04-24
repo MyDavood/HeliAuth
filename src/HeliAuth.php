@@ -4,6 +4,7 @@ namespace Heli\Auth;
 
 use Cache;
 use Crypt;
+use Illuminate\Http\Request;
 use Str;
 
 class HeliAuth
@@ -13,10 +14,9 @@ class HeliAuth
     ) {
     }
 
-    public function sendAlert($user): string
+    public function sendAlert($user, Request $request): string
     {
         if ($user != null) {
-            $request = request();
             $hashId = Str::uuid()->toString();
             $code = rand(pow(10, 3), pow(10, 4)-1);
 
