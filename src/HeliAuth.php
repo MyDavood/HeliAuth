@@ -42,7 +42,7 @@ class HeliAuth
 
             return $hashId;
         }
-        sleep(500);
+        sleep(1);
 
         return Str::uuid()->toString();
     }
