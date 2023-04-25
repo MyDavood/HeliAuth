@@ -63,4 +63,14 @@ class AuthBot
             ),
         );
     }
+
+    public function removeMessageButtons(
+        int|string $messageId,
+        int|string $userId
+    ): void {
+        $this->bot->editMessageReplyMarkup(
+            chatId: $userId,
+            messageId: $messageId,
+        );
+    }
 }
