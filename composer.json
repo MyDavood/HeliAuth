@@ -17,7 +17,8 @@
     "php": "^8.1",
     "laravel/framework": "^9.0|^10.0",
     "telegram-bot/api": "^2.3",
-    "ua-parser/uap-php": "^3.9"
+    "ua-parser/uap-php": "^3.9",
+    "pusher/pusher-php-server": "^7.2"
   },
   "extra": {
     "laravel": {
