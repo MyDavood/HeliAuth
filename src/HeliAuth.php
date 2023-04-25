@@ -3,9 +3,9 @@
 namespace Heli\Auth;
 
 use Cache;
-use Crypt;
 use Illuminate\Http\Request;
 use Str;
+use UAParser\Parser;
 
 class HeliAuth
 {
@@ -18,15 +18,31 @@ class HeliAuth
     {
         if ($user != null) {
             $hashId = Str::uuid()->toString();
-            $code = rand(pow(10, 3), pow(10, 4)-1);
+            $code = rand(pow(10, 3), pow(10, 4) - 1);
 
-            $message = $this->bot->sendConfirmToTelegram(
-                username: $user->username,
+            $parser = Parser::create();
+            $ua = $parser->parse($request->userAgent());
+            $params = [
+                'ip' => $request->getClientIp(),
+                'username' => $user->username,
+                'code' => $code,
+                'ua' => $ua,
+                'browser' => sprintf(
+                    '%s %s on %s %s,%s',
+                    $ua->ua->family,
+                    $ua->ua->major,
+                    $ua->os->family,
+                    $ua->os->major,
+                    $ua->os->minor
+                ),
+                'url' => str_replace(['http://', 'https://', 'www.'], '', url('/backend')),
+                'status' => 0,
+            ];
+
+            $message = $this->bot->sendAlert(
                 telegramId: $user->telegram_id,
-                code: $code,
+                params: $params,
                 hashId: $hashId,
-                ip: $request->getClientIp(),
-                browser: $request->userAgent(),
             );
 
             Cache::put(
@@ -37,6 +53,7 @@ class HeliAuth
                     'code' => $code,
                     'telegramId' => $user->telegram_id,
                     'status' => 0,
+                    'params' => $params,
                 ],
                 ttl: now()->addMinutes(config('heliAuth.hash_ttl')),
             );

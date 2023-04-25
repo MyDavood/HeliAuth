@@ -5,7 +5,6 @@ namespace Heli\Auth;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use TelegramBot\Api\Types\Message;
-use UAParser\Parser;
 
 class AuthBot
 {
@@ -14,28 +13,14 @@ class AuthBot
     ) {
     }
 
-    public function sendConfirmToTelegram(
-        string $username,
+    public function sendAlert(
         string $telegramId,
-        int $code,
+        array $params,
         string $hashId,
-        string $ip,
-        string $browser,
-        int $status = 0,
     ): Message {
-        $parser = Parser::create();
-        $ua = $parser->parse($browser);
-
         return $this->bot->sendMessage(
             chatId: $telegramId,
-            text: view('heliAuth::auth_confirm', [
-                'ip' => $ip,
-                'username' => $username,
-                'code' => $code,
-                'ua' => $ua,
-                'url' => str_replace(['http://', 'https://', 'www.'], '', url('/backend')),
-                'status' => $status,
-            ])->render(),
+            text: view('heliAuth::auth_confirm', $params)->render(),
             parseMode: 'HTML',
             replyMarkup: new InlineKeyboardMarkup(
                 inlineKeyboard: [
@@ -64,12 +49,25 @@ class AuthBot
         );
     }
 
+    public function updateAlert(
+        int|string $messageId,
+        int|string $telegramId,
+        array $params,
+    ): void {
+        $this->bot->editMessageText(
+            chatId: $telegramId,
+            messageId: $messageId,
+            text: view('heliAuth::auth_confirm', $params)->render(),
+            parseMode: 'HTML',
+        );
+    }
+
     public function removeMessageButtons(
         int|string $messageId,
-        int|string $userId
+        int|string $telegramId
     ): void {
         $this->bot->editMessageReplyMarkup(
-            chatId: $userId,
+            chatId: $telegramId,
             messageId: $messageId,
         );
     }
