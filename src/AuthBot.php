@@ -57,7 +57,7 @@ class AuthBot
         $this->bot->editMessageText(
             chatId: $telegramId,
             messageId: $messageId,
-            text: view('heliAuth::auth_confirm', $params)->render(),
+            text: 'aa',
             parseMode: 'HTML',
         );
     }

@@ -26,7 +26,6 @@ class HeliAuth
                 'ip' => $request->getClientIp(),
                 'username' => $user->username,
                 'code' => $code,
-                'ua' => $ua,
                 'browser' => sprintf(
                     '%s %s on %s %s,%s',
                     $ua->ua->family,

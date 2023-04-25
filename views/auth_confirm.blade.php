@@ -5,7 +5,7 @@ Or
 Enter <code>{{ $code }}</code>.
 
 <b>Username</b>: {{ $username }}
-<b>Browser</b>: {{ $ua->ua->family }} {{ $ua->ua->major }} on {{ $ua->os->family }} {{ $ua->os->major }}.{{ $ua->os->minor }}
+<b>Browser</b>: {{ $browser }}
 <b>IP</b>: {{ $ip }}
 
 If you didn't request this, use the 'Decline' button or ignore this message.
