@@ -20,7 +20,7 @@ class HeliAuth
             $hashId = Str::uuid()->toString();
             $code = rand(pow(10, 3), pow(10, 4)-1);
 
-            $this->bot->sendConfirmToTelegram(
+            $message = $this->bot->sendConfirmToTelegram(
                 username: $user->username,
                 telegramId: $user->telegram_id,
                 code: $code,
@@ -33,6 +33,7 @@ class HeliAuth
                 key: $hashId,
                 value: [
                     'userId' => $user->id,
+                    'messageId' => $message->getMessageId(),
                     'code' => $code,
                     'telegramId' => $user->telegram_id,
                     'status' => 0,
