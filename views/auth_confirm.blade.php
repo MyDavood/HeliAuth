@@ -9,7 +9,6 @@ Enter <code>{{ $code }}</code>.
 <b>IP</b>: {{ $ip }}
 
 If you didn't request this, use the 'Decline' button or ignore this message.
-{{ $status }}
 @if($status === 1)
 
 ✅ Accepted
