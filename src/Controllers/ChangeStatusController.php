@@ -29,7 +29,7 @@ class ChangeStatusController
             ttl: now()->addMinutes(config('heliAuth.hash_ttl')),
         );
         Cache::delete($request->hash);
-        event(new AuthorizeStatusEvent(
+        broadcast(new AuthorizeStatusEvent(
             oldHash: $request->hash,
             newHash: $newHash,
         ));
