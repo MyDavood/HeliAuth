@@ -12,6 +12,9 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../views', 'heliAuth');
         $this->mergeConfigFrom(__DIR__.'/../config/heliAuth.php', 'heliAuth');
+        $this->publishes([
+            __DIR__.'/../config/heliAuth.php' => config_path('heliAuth.php'),
+        ]);
     }
 
     public function register(): void
