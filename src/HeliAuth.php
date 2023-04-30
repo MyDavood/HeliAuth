@@ -3,8 +3,10 @@
 namespace Heli\Auth;
 
 use Cache;
+use Http;
 use Illuminate\Http\Request;
 use Str;
+use Throwable;
 use UAParser\Parser;
 
 class HeliAuth
@@ -19,21 +21,11 @@ class HeliAuth
         if ($user != null) {
             $hashId = Str::uuid()->toString();
             $code = rand(pow(10, 3), pow(10, 4) - 1);
-
-            $parser = Parser::create();
-            $ua = $parser->parse($request->userAgent());
             $params = [
-                'ip' => $request->getClientIp(),
+                'ip' => $this->getIpText($request->getClientIp()),
                 'username' => $user->username,
                 'code' => $code,
-                'browser' => sprintf(
-                    '%s %s on %s %s,%s',
-                    $ua->ua->family,
-                    $ua->ua->major,
-                    $ua->os->family,
-                    $ua->os->major,
-                    $ua->os->minor
-                ),
+                'browser' => $this->getBrowserText($request->userAgent()),
                 'url' => str_replace(['http://', 'https://', 'www.'], '', url('/backend')),
                 'status' => 0,
             ];
@@ -62,5 +54,48 @@ class HeliAuth
         sleep(1);
 
         return Str::uuid()->toString();
+    }
+
+    private function getCountry(string $ip): string
+    {
+        $response = Http::get(sprintf('http://ip-api.com/json/%s?fields=country', $ip))->object();
+        return $response->country;
+    }
+
+    private function getIpText(string $ip): string
+    {
+        $country = null;
+        try {
+            $country = $this->getCountry($ip);
+        } catch (Throwable) {}
+        if ($country != null) {
+            return sprintf('%s (%s)', $ip, $country);
+        }
+        return $country;
+    }
+
+    private function getBrowserText(string $userAgent): string
+    {
+        $parser = Parser::create();
+        $ua = $parser->parse($userAgent);
+
+        if (blank($ua->os->minor)) {
+            return sprintf(
+                '%s %s on %s %s',
+                $ua->ua->family,
+                $ua->ua->major,
+                $ua->os->family,
+                $ua->os->major,
+            );
+        }
+
+        return sprintf(
+            '%s %s on %s %s.%s',
+            $ua->ua->family,
+            $ua->ua->major,
+            $ua->os->family,
+            $ua->os->major,
+            $ua->os->minor
+        );
     }
 }
