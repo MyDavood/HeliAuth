@@ -56,7 +56,7 @@ class HeliAuth
         return Str::uuid()->toString();
     }
 
-    private function getCountry(string $ip): string
+    private function getCountry(string $ip): string|null
     {
         $response = Http::get(sprintf('http://ip-api.com/json/%s?fields=country', $ip))->object();
         return $response->country;
@@ -71,7 +71,7 @@ class HeliAuth
         if ($country != null) {
             return sprintf('%s (%s)', $ip, $country);
         }
-        return $country;
+        return $ip;
     }
 
     private function getBrowserText(string $userAgent): string
